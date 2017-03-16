@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Entorno de programación Zero</title>
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="css/bootstrap.vertical-tabs.min.css" rel="stylesheet">
+   <link href="css/fakeLoader.css" rel="stylesheet">
+   <link href="css/anno.css" rel="stylesheet">
+   <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+  <style>
+    body {
+      background-color: #D0F4F7;
+      font-family: 'Nunito', sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    .blocklyTreeLabel:hover {
+      cursor: pointer;
+    }
+    .blocklyTreeRow:hover {
+      cursor: pointer;
+      font-size: 20;
+      background-color: #D0F4F7 !important;
+    }
+    .modal {
+        text-align: center;
+      }
+    .blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+
+      font-size: 30;
+      font-family: 'Nunito', sans-serif;
+    }
+
+      @media screen and (min-width: 768px) { 
+        .modal:before {
+          display: inline-block;
+          vertical-align: middle;
+          content: " ";
+          height: 100%;
+        }
+      }
+
+      .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+      }
+      #game
+      {
+          background: #fff;
+          border-radius: 20px;
+          height: 500px;
+          overflow: hidden;
+          width: 487px;
+
+          /* this fixes the overflow:hidden in Chrome/Opera */
+          -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+      }
+
+    canvas {
+      background-color: blue; 
+      width: 100%;
+
+      height: auto;
+    }
+    .navbar {
+    margin-bottom: 10px;
+  }
+    .modal.modal-wide{
+    overflow: hidden;
+  }
+  .modal.modal-wide .modal-dialog {
+    width: 94%;
+  }
+  .modal-wide .modal-body {
+    overflow-y: auto;
+  }
+
+  @-webkit-keyframes ezCustTrans {
+    0% {
+      -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      -webkit-transform:  perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      -moz-transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      -ms-transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      opacity: 0;
+    }
+      68% {
+      -webkit-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      -moz-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      -ms-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      opacity: 0.8;                
+      }
+    100% {
+      -webkit-transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      -moz-transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      -ms-transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      opacity: 1;
+    }
+  }
+  @keyframes ezCustTrans {
+    0% {
+      -webkit-transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      -webkit-transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      -moz-transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      -ms-transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      transform: perspective(90%) rotateY(-65deg) rotateX(-45deg) translateZ(-200px);
+      opacity: 0;
+    }
+    68% {
+      -webkit-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      -moz-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      -ms-transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      transform:  rotateY(10deg) rotateX(10deg) translateZ(20px);
+      opacity: 0.8;                
+      }
+      100% {
+      -webkit-transform: rotateY(0deg) rotateX(0deg) translateZ(0px);
+      -moz-transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      -ms-transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      transform:  rotateY(0deg) rotateX(0deg) translateZ(0px);
+      opacity: 1;
+    }
+  }
+  .ezCustTrans {
+      -webkit-animation-duration: 0.75s;
+      animation-duration: 0.75s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    -webkit-animation-name: ezCustTrans;
+    animation-name: ezCustTrans;
+  }          
+
+
+  </style>
+</head>
+<body style="display:none">
+
+
+
+<!-- MODAL'S -->
+
+<!-- INSTRUCTION -->
+
+ <div class="modal" id="ModalInstruction" tabIndex="-1" role="dialog"   data-backdrop="static" aria-labelledby="myModalLabel">
+          <div class="modal-dialog ezCustTrans" role="document">
+
+            <div class="modal-content">
+              <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                 <h1 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-info-sign "></i> Instrucciones</h1>
+              </div>
+
+              <div class="modal-body">
+
+                <h1>Ayuda a tu personaje a alcanzar la moneda!</h1> 
+                <h1>No te olvides de esto:</h1>
+                <div class="row">
+                  <div class="col-md-6">
+                      <strong><h4>Atributos</h4></strong> 
+                      <div class="row">
+                        <div class="col-md-12"><h4>Las caracteristicas que permiten modificar movimientos de tu personaje.</h4></div>
+                      </div>
+                  </div>
+                  <div class="col-md-6"> 
+                      <strong><h4>Acciones</h4></strong>
+
+                      <div class="row">  
+                          <div class="col-md-12"><h4>Lo que puede realizar tu personaje.</h4></div>
+                      </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-lg" data-dismiss="modal">Cerrar</button>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+
+<!-- FIN INSTRUCTION -->
+
+<!-- INSPIRATION -->
+  <div class="modal" id="ModalInspiration" tabIndex="-1" role="dialog"  data-backdrop="static"  aria-labelledby="myModalLabel">
+          <div class="modal-dialog ezCustTrans" role="document">
+
+            <div class="modal-content">
+              <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-hand-up"></i> Inspiración</h4>
+              </div>
+
+              <div class="modal-body">
+              <p>Este proyecto nace inspirado por:</p>
+                <div class="row">
+
+                  <div class="col-md-4">
+                    <a href="https://hourofcode.com/es"><img  class="img-responsive" src="images/logo-hoc.png" /></a>
+                  </div>
+                  <div class="col-md-4">
+
+                    <a href="http://el.media.mit.edu/logo-foundation/"><img  class="img-responsive" src="images/logo-logo.gif" /></a>
+                  </div>
+                  <div class="col-md-4">
+
+                    <a href="https://scratch.mit.edu/"><img  class="img-responsive" src="images/logo-scratch.jpg" /></a>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-lg" data-dismiss="modal">Cerrar</button>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+<!-- END INSPIRATION -->
+
+<!-- ABOUT ME -->
+<div class="modal" id="ModalAboutMe" tabIndex="-1" role="dialog"  data-backdrop="static"  aria-labelledby="myModalLabel">
+          <div class="modal-dialog ezCustTrans" role="document">
+
+            <div class="modal-content">
+              <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-th-large"></i> Entorno de programación Zero</h4>
+              </div>
+
+              <div class="modal-body">
+                <p>Zero nace como proyecto de tesis para enseñar a programar a niños.</p>
+                <p>Actualmente se encuentra en una fase alfa.
+                </p>
+                <p>
+                Dudas y/o sugerencias: camilochs@gmail.com
+                </p>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-lg" data-dismiss="modal">Cerrar</button>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+<!-- FIN ABOUT ME -->
+
+<!-- YOU LOSE -->
+
+   <div class="modal" id="ModalLose" tabIndex="-1" role="dialog"  data-backdrop="static"  aria-labelledby="myModalLabel">
+                <div class="modal-dialog ezCustTrans" role="document">
+
+                  <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Ups!</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <h4>No alcanzaste la moneda...</h4>
+                        <p><strong>No te preocupes puedes volver a intentarlo :)</strong></p>
+
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-warning btn-lg" data-dismiss="modal">Cerrar</button>
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+<!-- FIN - YOU LOSE-->
+
+<!-- YOU WIN -->
+
+ <div class="modal" id="ModalWinLevel1" tabIndex="-1" role="dialog"  data-backdrop="static" aria-labelledby="myModalLabel">
+                <div class="modal-dialog ezCustTrans" role="document">
+
+                  <div class="modal-content">
+                    <div class="modal-header bg-success">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel"><i class="glyphicon glyphicon-star"></i> Excelente!</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                         <div class="row">
+                            <div class="col-md-12">
+                              <h4>Felicitaciones!, haz conseguido la moneda </h4>
+                            </div> 
+                        </div> 
+                      <div class="row">
+                        <div class="col-md-12">
+                          <p>Mira el código que acabas de crear:</p>
+
+                        </div>
+
+                      </div>
+                       <div class="row">
+                        
+                           <div class="col-md-12">
+                              
+                            <pre><code class="javascript" onchange="HLAgain();" id="codeAreaWin">...</code></pre>
+                           </div> 
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-success btn-lg" data-dismiss="modal" disabled>Siguiente Nivel</button>
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+<!-- FIN - YOU WIN-->
+<!-- FIN MODAL'S -->
+<div class="fakeLoader"></div>
+<footer>
+<nav class="navbar navbar-default"  role="navigation">
+
+  <div class="navbar-header">
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Entorno de programación Zero - Nivel 2</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Inicio</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Información <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#" data-toggle="modal" data-target="#ModalInspiration">Inspiración</a></li>
+          <li class="divider"></li>
+          <li><a href="#" data-toggle="modal" data-target="#ModalAboutMe">Acerca de</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+</footer>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-7">
+
+      <!-- Button trigger modal -->
+        <button type="button" class=" btn btn-info btn-lg " data-toggle="modal" data-target="#ModalInstruction">
+          <i class="glyphicon glyphicon-info-sign "></i>   Instrucciones
+        </button>
+
+        <button type="button" id="trashButton" class="btn btn-danger  btn-lg" onclick="Blockly.mainWorkspace.clear(); $('#codeArea').text('');  ">
+          <i class="glyphicon glyphicon-trash "></i>   Borrar todo
+        </button>
+        <!-- Modal -->
+
+    </div>
+    <div class="col-sm-5 ">
+        <div class="row ">
+          <div class="col-sm-12">
+              <button type="button" id="btnInit" class="btn btn-success btn-lg pull-left" 
+                  onClick ="startGame(this, 'level2')" >
+                <i class="glyphicon glyphicon-play"></i> Iniciar
+              </button>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>
+      <!--
+        <button onclick="parseCode()">Parse JavaScript</button>
+        <button onclick="stepCode()" id="stepButton" disabled="disabled">Step JavaScript</button>-->
+      </p>
+    </div>
+  </div>  
+  <div class="row">
+      <div class="col-md-7">
+
+        <div class="row">
+            <div class="col-xs-1" >
+              
+              <ul class="nav nav-tabs tabs-left sideways">
+                <li class="active"><a href="#home-r" onclick="onClickViewBlock()" data-toggle="tab">Entorno</a></li>
+                <li><a href="#profile-r" data-toggle="tab" onclick="onClickViewCode()">Ver Código</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-11" style="padding-left:0px">
+              
+                <div class="tab-content">
+                  <div class="tab-pane active" id="home-r">
+                       <div id="blocklyDiv" style="height:500px;min-height: 100%; width: 100%;"></div>
+
+                        <xml id="toolbox" style="display: none">
+                           
+                         
+                            <category name="Acciones">
+                              <block type="right"></block>
+                              <block type="attackToBox"></block>
+                              
+                            </category>
+                             <category name="Condicionales"> 
+                              
+                                <block type="controls_if"></block>
+                                <!--
+                                 <block type="controls_if">
+                                    <mutation else="1"></mutation>
+                                </block>
+                                 <block type="controls_if">
+                                    <mutation elseif="1" else="1"></mutation>
+                                </block>
+                                <block type="logic_compare"></block>
+                                <block type="logic_operation"></block>
+                                  -->
+                             </category>
+                                <category name="Variables">
+                            <!--  <block type="var_estoyfrenteaunacaja"></block>-->
+                              <block type="var_value_estoyfrenteaunacaja"></block>
+                            </category>
+
+                            <!--
+                            <category name="Valores">
+                               
+                                <block type="text" value="hola"></block>
+                                <block type="math_number"></block>
+                            </category>-->
+                          
+                             <!--
+                              <category name="Repeticiones"> 
+                                  <block type="controls_repeat_ext">
+                                    <value name="TIMES">
+                                    <block type="math_number">
+                                        <field name="NUM">10</field>
+                                    </block>
+                                    </value>
+                                </block>
+                                <block type="controls_whileUntil"></block>
+                              </category>
+                              -->
+                        </xml>
+
+                  </div>
+                  <div class="tab-pane" id="profile-r">
+                    <pre><code class="js" id="codeArea">...</code></pre>
+                      
+                  </div>
+                </div>
+       
+            </div>
+              
+        </div>
+        
+      </div>
+        <div class="col-md-5">
+              <canvas id='game' style="padding-left:0px" width='487.5' height='500'></canvas>
+        </div>
+  </div>
+
+
+</div>
+</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+    <script src="scripts/browser.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    <script src="scripts/anno.js" type="text/javascript"></script>
+    <script src="scripts/fakeLoader.min.js"></script>
+    <script src='scripts/quintus-all.min.js'></script>
+
+    <script src="scripts/blockly_compressed.js"></script>
+    <script src="scripts/blocks_compressed.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script  src="acorn_interpreter.js"></script>
+    <script src="scripts/javascript_compressed.js"></script>
+    <script src="scripts/msg/js/es.js"></script>
+
+    <script src="scripts/zeroblocks.js"></script>
+    <script src="scripts/zerolanguage.js"></script>
+    
+    <script src="scripts/zero_interactive.js"></script>
+    
+    <script src="scripts/zerogame.js"></script>
+<script language="javascript" type="text/javascript">
+
+
+
+  $(document).ready(function(){
+
+      $("body").show();
+
+      $(".fakeLoader").fakeLoader({ 
+        timeToHide:1000, 
+        zIndex:9999, 
+        spinner:"spinner7", 
+        bgColor:"#D0F4F7" });
+
+    Q.load("rex.json, rex.png, box.png,bg2.png, box.json,barren1.png, grass1.png,cactus.png, bg.png, cloud1.png, cloud2.png, cloud3.png, grassHalfMid.png, " +
+        "grassCenter.png, background-floor.png, plant.png, coin.png, coin.json", function() {
+        Q.compileSheets("rex.png","rex.json");
+        Q.compileSheets("coin.png","coin.json");
+        Q.compileSheets("box.png","box.json");
+        Q.animations("rex", {
+          idle: { frames: [6,7,8], rate: 1/3, flip: false, loop: true },
+          run: { frames: [0,1,2,3,4,5], rate: 1/15, flip: false },
+          attack: { frames: [8,9,10,11], rate: 1/5, flip: false, trigger: "_idle", loop:false},
+          jump: { frames: [6,7,8], rate: 1/1, flip: false, trigger: "_idleAfterJump"},
+        });
+        Q.animations("box", {
+          broken: { frames: [0,1,2,3,4,5,6,7,8], rate: 1/9, flip: false, loop: false, trigger: "_brokenFinish" }
+        });
+        Q.stageScene("level2");
+      // Q.debug = true;
+    });
+    
+  });
+</script>    
+    <script  type="text/javascript">
+    var globalVar;
+    var highlightStep = [];
+    var commandsTimeout = [];
+    var codeTextArea = { "raw": "", "visualization": ""};
+    var workspace = Blockly.inject('blocklyDiv',
+         { media: '../../media/',
+          zoom: { enable: true },
+          trashcan: true,
+          grid:{spacing: 20,
+          length: 3,
+          colour: '#ccc',
+          snap: true  },
+          toolbox: document.getElementById('toolbox')});
+
+    var myInterpreter = null;
+
+    
+    function initApi(interpreter, scope) {
+
+
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
+
+
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(prompt(text));
+      };
+      interpreter.setProperty(scope, 'prompt',
+          interpreter.createNativeFunction(wrapper));
+
+
+      var wrapper = function(id) {
+        id = id ? id.toString() : '';
+        return interpreter.createPrimitive(highlightBlock(id));
+      };
+      interpreter.setProperty(scope, 'highlightBlock',
+          interpreter.createNativeFunction(wrapper));
+    }
+
+    var highlightPause = false;
+
+    function highlightBlock(id) {
+      workspace.highlightBlock(id);
+      highlightPause = true;
+    }
+
+    function parseCode(isStep) {
+      console.log("parseeee");
+      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+      Blockly.JavaScript.addReservedWords('highlightBlock');
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      myInterpreter = new Interpreter(code, initApi);
+    
+      var finalCode = "";
+      var codelines = code.split("\n");
+      var codeHighlightBlock = "";
+      let tabs = "";
+      let cttabs = 0;
+      let ctCodeBlock = 0;
+      let rawcode = "";
+      for(var i = 0; i < codelines.length; i++){
+        if(codelines[i].toString().indexOf("highlightBlock") < 0 && codelines[i] != ""){
+          //var t = codelines[i].replace("rex.", "");
+          //t = t.replace(";", "");
+          if(codelines[i].indexOf("var ") == -1){
+            codelines[i] = codelines[i].replace(/\s/g, "");
+            
+          }
+      
+          if(functionToSpanish[codelines[i]]){
+            finalCode += tabs + functionToSpanish[codelines[i]] + "\n";
+            rawcode += tabs + functionToSpanish[codelines[i]] + "\n";
+          }else{
+            if(codelines[i].indexOf("}") != -1){ //existe
+              cttabs--;
+              tabs = "";
+              let j = 0;
+              while(j++ < cttabs) tabs += '\t'; 
+              console.log(tabs);
+            }
+            finalCode += tabs + codelines[i] + "\n";
+            rawcode += tabs + codelines[i] + "\n";
+            if(codelines[i].indexOf("if") != -1){ //existe
+              cttabs++;
+              tabs = "";
+              let j = 0;
+              while(j++ < cttabs) tabs += '\t'; 
+            }
+            
+          }
+        }else{
+          if(codelines[i].indexOf("highlightBlock") != -1){
+            codeHighlightBlock += codelines[i] + "\n";
+            rawcode += codelines[i] + "\n";
+
+          }
+          
+        }
+      }
+      console.log(rawcode);
+      codeTextArea["raw"] = rawcode;
+      codeTextArea["visualization"] = finalCode;
+      $("#codeArea").text(codeTextArea["visualization"]);
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+      myInterpreter = new Interpreter(codeHighlightBlock, initApi);
+      //alert('Ready to execute this code:\n\n' + code);
+      //document.getElementById('stepButton').disabled = '';
+      
+      if(isStep){
+        
+        highlightPause = false;
+        workspace.traceOn(true);
+        workspace.highlightBlock(null);
+      //  nextStep();
+        
+      }
+    }
+    function nextStep(){
+
+      if (myInterpreter.step()) {
+          highlightStep.push(setTimeout(nextStep, 120));
+      }
+      
+    }
+    function stepCode() {
+      try {
+        var ok = myInterpreter.step();
+      } finally {
+        if (!ok) {
+          // Program complete, no more code to execute.
+         // document.getElementById('stepButton').disabled = 'disabled';
+          return;
+        }
+      }
+      if (highlightPause) {
+        // A block has been highlighted.  Pause execution here.
+        highlightPause = false;
+      } else {
+        // Keep executing until a highlight statement is reached.
+        stepCode();
+      }/*
+      if (myInterpreter.step()) {
+          highlightStep.push(setTimeout(nextStep, 120));
+      }*/
+    }
+    function onClickViewBlock(){
+        $('.blocklyToolboxDiv').show();
+        $('#trashButton').prop('disabled', false);
+    }
+    function onClickViewCode(){
+        $('.blocklyToolboxDiv').hide(); 
+        $('#codeArea').show();
+        parseCode(false);
+        $('#codeArea').prop('disabled', true);
+        $('#trashButton').prop('disabled', true);
+
+    }
+  </script>
+
+
+</html>
